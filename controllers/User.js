@@ -33,4 +33,26 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/login", async (req, res) => {
+  var password = req.body.password;
+  var email = req.body.email;
+  try {
+    const loginByEmailAndPasswordResponse =
+      await UserServices.loginByEmailAndPassword({
+        email,
+        password,
+      });
+    if (loginByEmailAndPasswordResponse) {
+      res
+        .json(BaseResponse.SUCCESS(loginByEmailAndPasswordResponse))
+        .status(200);
+      return;
+    } else {
+      res.json(BaseResponse.DATA_NOT_FOUND()).status(200);
+    }
+  } catch (error) {
+    res.json(BaseResponse.INTERNAL_SERVICE_ERROR()).status(501);
+  }
+});
+
 module.exports = router;
